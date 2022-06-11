@@ -1,0 +1,183 @@
+---
+title: "metastatic_potential_primary_tumor"
+author: "Wei"
+date: "12/16/2021"
+output: html_document
+---
+```{r}
+library(ComplexHeatmap)
+library(circlize)
+```
+
+```{r}
+tumor_cells_tumor_genes_gc <- read.csv('tumor_mean_tumor_genes_gc.csv',row.names = 1)
+tumor_cells_tumor_genes_gc <- as.matrix(tumor_cells_tumor_genes_gc)
+
+tumor_cells_met_genes_gc <- read.csv('tumor_mean_met_genes_gc.csv',row.names = 1)
+tumor_cells_met_genes_gc <- as.matrix(tumor_cells_met_genes_gc)
+
+met_cells_tumor_genes_gc <- read.csv('met_mean_tumor_genes_gc.csv',row.names = 1)
+met_cells_tumor_genes_gc <- as.matrix(met_cells_tumor_genes_gc)
+
+met_cells_met_genes_gc <- read.csv('met_mean_met_genes_gc.csv',row.names = 1)
+met_cells_met_genes_gc <- as.matrix(met_cells_met_genes_gc)
+```
+
+```{r}
+tumor_cells_meta <- read.csv('tumor_metadata.csv',row.names = 1)
+tumor_genes_meta <- read.csv('tumor_genes_metadata.csv',row.names = 1)
+
+met_cells_meta <- read.csv('met_metadata.csv',row.names = 1)
+met_genes_meta <- read.csv('met_genes_metadata.csv',row.names = 1)
+```
+
+
+```{r}
+goi = c('MYL12B','MYL6','PFN1','TMSB4X','TMSB10','ARPC1B','EZR','FLII','HSPB1','HSPA8','HSPA6','HSPH1','HSP90AB3P','DNAJA1','DNAJB1','DNAJC3','BAG3','PPM1G','SSRP1','NONO','ALDOA','LDHA','PGK1','PFKL','PGM1','GPX4','PRDX4','ACO2','ASPH','IDH2','SQLE','NPC2','SPTSSA')
+
+tumor_goi_anno = rowAnnotation(foo = anno_mark(at = which(rownames(tumor_genes_meta) %in% goi),labels = rownames(tumor_genes_meta)[which(rownames(tumor_genes_meta) %in% goi)]))
+
+met_goi_anno = rowAnnotation(foo = anno_mark(at = which(rownames(met_genes_meta) %in% goi),labels = rownames(met_genes_meta)[which(rownames(met_genes_meta) %in% goi)]))
+```
+
+```{r}
+top_annotation_tumor_ref = HeatmapAnnotation(tumor_ID = tumor_cells_meta$Tumor_ID,
+                                             metastatic_potential = tumor_cells_meta$metastatic_potential_group,
+    col = list(type = c("Tumor" = "#ff7f00", "Metastatic" = "#377eb8"), rs = c("ER-" = "#02818a", "ER+" = "#810f7c"), 
+               method = c("SS2" = "#80CDC1", "MULTI" = "#5E3C99"),
+               metastatic_potential = c("low" = "#B3B3B3", "moderate" = "#666666", "high" = "#191919", "all" = "#ffffff"),
+               tumor_ID=c("H3204" = "#ffed6f", "H4272" = "#ccebc5", "H5097" = "#bc80bd", "H5471" = "#b3de69", "HCI001" = "#fdb462", 
+                          "HCI005" = "#fccde5", "HCI009" = "#fb8072", "HCI010" = "#1598cc", "HCI011" = "#bebada", "J2036" = "#8dd3c7", 
+                          "J53353" = "#80b1d3", "J55454" = "#e8ee88", "global" = "black", "HCI002" = "#d9d9d9")),border = TRUE,gap = unit(3, "points"),
+    simple_anno_size = unit(0.5, "cm"),annotation_name_side = "left"
+    )
+
+
+top_annotation_met_ref = HeatmapAnnotation(tumor_ID = met_cells_meta$Tumor_ID,
+                                             metastatic_potential = met_cells_meta$metastatic_potential_group,
+    col = list(type = c("Tumor" = "#ff7f00", "Metastatic" = "#377eb8"), rs = c("ER-" = "#02818a", "ER+" = "#810f7c"), 
+               method = c("SS2" = "#80CDC1", "MULTI" = "#5E3C99"),
+               metastatic_potential = c("low" = "#B3B3B3", "moderate" = "#666666", "high" = "#191919", "all" = "#ffffff"),
+               tumor_ID=c("H3204" = "#ffed6f", "H4272" = "#ccebc5", "H5097" = "#bc80bd", "H5471" = "#b3de69", "HCI001" = "#fdb462", 
+                          "HCI005" = "#fccde5", "HCI009" = "#fb8072", "HCI010" = "#1598cc", "HCI011" = "#bebada", "J2036" = "#8dd3c7", 
+                          "J53353" = "#80b1d3", "J55454" = "#e8ee88", "global" = "black", "HCI002" = "#d9d9d9")),border = TRUE,gap = unit(3, "points"),
+    simple_anno_size = unit(0.5, "cm"),annotation_name_side = "left",show_annotation_name = FALSE
+    )
+```
+
+```{r}
+tumor_cells_tumor_and_met_genes_plot_ref <- (Heatmap(tumor_cells_tumor_genes_gc, name = "expression",  cluster_rows = FALSE, cluster_columns = FALSE,show_column_names = FALSE,column_dend_reorder = FALSE,show_column_dend = FALSE,cluster_column_slices = FALSE,show_row_names = FALSE, column_split = factor(tumor_cells_meta$metastatic_potential_group, levels = c("low", "moderate", "high", "all")),
+                    row_split = factor(tumor_genes_meta$group, levels = c("low", "moderate", "high")), row_gap = unit(0, "mm"), column_gap = unit(0, "mm"),
+    col = colorRamp2(c(-2, 0, 2), c("#2166AC", "#F7F7F7","#B2182B")),
+    top_annotation = top_annotation_tumor_ref,
+    layer_fun = function(j, i, x, y,  width, height, fill, slice_r, slice_c) {
+        if(slice_r == slice_c) {
+            grid.rect(gp = gpar(lwd = 2, fill = "transparent"))
+        }}) %v% Heatmap(tumor_cells_met_genes_gc, name = "expression",  cluster_rows = FALSE, cluster_columns = FALSE,show_column_names = FALSE,column_dend_reorder = FALSE,show_column_dend = FALSE,cluster_column_slices = FALSE,show_row_names = FALSE, column_split = factor(tumor_cells_meta$metastatic_potential_group, levels = c("low", "moderate", "high", "all")),
+                    row_split = factor(met_genes_meta$group, levels = c("low", "moderate", "high")), row_gap = unit(0, "mm"), column_gap = unit(0, "mm"),
+    col = colorRamp2(c(-2, 0, 2), c("#2166AC", "#F7F7F7","#B2182B")))) 
+
+    
+
+tumor_cells_tumor_and_met_genes_plot_ref
+```
+
+```{r}
+pdf("SS2_individual_tumor_1_vs_rest_tumor_cells_tumor_and_met_genes_ref.pdf", width=5, height=10)
+draw(tumor_cells_tumor_and_met_genes_plot_ref)
+dev.off()
+```
+
+
+```{r}
+met_cells_tumor_and_met_genes_plot_ref <- (Heatmap(met_cells_tumor_genes_gc, name = "expression",  cluster_rows = FALSE, cluster_columns = FALSE,show_column_names = FALSE,column_dend_reorder = FALSE,show_column_dend = FALSE,cluster_column_slices = FALSE,show_row_names = FALSE, column_split = factor(met_cells_meta$metastatic_potential_group, levels = c("low", "moderate", "high", "all")),
+                    row_split = factor(tumor_genes_meta$group, levels = c("low", "moderate", "high")), row_gap = unit(0, "mm"), column_gap = unit(0, "mm"),
+    col = colorRamp2(c(-2, 0, 2), c("#2166AC", "#F7F7F7","#B2182B")),
+    top_annotation = top_annotation_met_ref, right_annotation = tumor_goi_anno,
+    ) %v% Heatmap(met_cells_met_genes_gc, name = "expression",  cluster_rows = FALSE, cluster_columns = FALSE,show_column_names = FALSE,column_dend_reorder = FALSE,show_column_dend = FALSE,cluster_column_slices = FALSE,show_row_names = FALSE, column_split = factor(met_cells_meta$metastatic_potential_group, levels = c("low", "moderate", "high", "all")),
+                    row_split = factor(met_genes_meta$group, levels = c("low", "moderate", "high")), row_gap = unit(0, "mm"), column_gap = unit(0, "mm"),
+    col = colorRamp2(c(-2, 0, 2), c("#2166AC", "#F7F7F7","#B2182B")), right_annotation = met_goi_anno,
+    layer_fun = function(j, i, x, y,  width, height, fill, slice_r, slice_c) {
+        if(slice_r == slice_c) {
+            grid.rect(gp = gpar(lwd = 2, fill = "transparent"))
+        }}))
+    
+    
+met_cells_tumor_and_met_genes_plot_ref
+```
+
+
+```{r}
+pdf("SS2_individual_tumor_1_vs_rest_met_cells_tumor_and_met_genes_ref.pdf", width=5, height=10)
+draw(met_cells_tumor_and_met_genes_plot_ref)
+dev.off()
+```
+
+```{r}
+top_annotation_tumor = HeatmapAnnotation(tumor_ID = tumor_cells_meta$Tumor_ID,
+                                             metastatic_potential = tumor_cells_meta$metastatic_potential_group,
+    col = list(type = c("Tumor" = "#ff7f00", "Metastatic" = "#377eb8"), rs = c("ER-" = "#02818a", "ER+" = "#810f7c"), 
+               method = c("SS2" = "#80CDC1", "MULTI" = "#5E3C99"),
+               metastatic_potential = c("low" = "#B3B3B3", "moderate" = "#666666", "high" = "#191919", "all" = "#ffffff"),
+               tumor_ID=c("H3204" = "#ffed6f", "H4272" = "#ccebc5", "H5097" = "#bc80bd", "H5471" = "#b3de69", "HCI001" = "#fdb462", 
+                          "HCI005" = "#fccde5", "HCI009" = "#fb8072", "HCI010" = "#1598cc", "HCI011" = "#bebada", "J2036" = "#8dd3c7", 
+                          "J53353" = "#80b1d3", "J55454" = "#e8ee88", "global" = "black", "HCI002" = "#d9d9d9")),border = TRUE,gap = unit(3, "points"),
+    simple_anno_size = unit(0.5, "cm"), show_legend = FALSE,show_annotation_name = FALSE
+    )
+
+
+top_annotation_met = HeatmapAnnotation(tumor_ID = met_cells_meta$Tumor_ID,
+                                             metastatic_potential = met_cells_meta$metastatic_potential_group,
+    col = list(type = c("Tumor" = "#ff7f00", "Metastatic" = "#377eb8"), rs = c("ER-" = "#02818a", "ER+" = "#810f7c"), 
+               method = c("SS2" = "#80CDC1", "MULTI" = "#5E3C99"),
+               metastatic_potential = c("low" = "#B3B3B3", "moderate" = "#666666", "high" = "#191919", "all" = "#ffffff"),
+               tumor_ID=c("H3204" = "#ffed6f", "H4272" = "#ccebc5", "H5097" = "#bc80bd", "H5471" = "#b3de69", "HCI001" = "#fdb462", 
+                          "HCI005" = "#fccde5", "HCI009" = "#fb8072", "HCI010" = "#1598cc", "HCI011" = "#bebada", "J2036" = "#8dd3c7", 
+                          "J53353" = "#80b1d3", "J55454" = "#e8ee88", "global" = "black", "HCI002" = "#d9d9d9")),border = TRUE,gap = unit(3, "points"),
+    simple_anno_size = unit(0.5, "cm"), show_legend = FALSE,show_annotation_name = FALSE
+    )
+```
+
+
+```{r}
+tumor_cells_tumor_met_genes_plot <- Heatmap(tumor_cells_tumor_genes_gc, name = "expression",  cluster_rows = FALSE, cluster_columns = FALSE,show_column_names = FALSE,column_dend_reorder = FALSE,show_column_dend = FALSE,cluster_column_slices = FALSE,show_row_names = FALSE, column_split = factor(tumor_cells_meta$metastatic_potential_group, levels = c("low", "moderate", "high", "all")),show_heatmap_legend = FALSE,column_title = NULL, row_title = NULL,
+                    row_split = factor(tumor_genes_meta$group, levels = c("low", "moderate", "high")), row_gap = unit(0, "mm"), column_gap = unit(0, "mm"),
+    col = colorRamp2(c(-2, 0, 2), c("#2166AC", "#F7F7F7","#B2182B")),
+    top_annotation = top_annotation_tumor,
+    layer_fun = function(j, i, x, y,  width, height, fill, slice_r, slice_c) {
+        if(slice_r == slice_c) {
+            grid.rect(gp = gpar(lwd = 2, fill = "transparent"))
+        }}) %v% Heatmap(tumor_cells_met_genes_gc, name = "expression",  cluster_rows = FALSE, cluster_columns = FALSE,show_column_names = FALSE,column_dend_reorder = FALSE,show_column_dend = FALSE,cluster_column_slices = FALSE,show_row_names = FALSE, column_split = factor(tumor_cells_meta$metastatic_potential_group, levels = c("low", "moderate", "high", "all")),show_heatmap_legend = FALSE,column_title = NULL, row_title = NULL,
+                    row_split = factor(met_genes_meta$group, levels = c("low", "moderate", "high")), row_gap = unit(0, "mm"), column_gap = unit(0, "mm"),
+    col = colorRamp2(c(-2, 0, 2), c("#2166AC", "#F7F7F7","#B2182B")))
+
+tumor_cells_tumor_met_genes_plot
+```
+
+```{r}
+pdf("SS2_individual_tumor_1_vs_rest_tumor_cells_tumor_and_met_genes.pdf", width=4, height=10)
+draw(tumor_cells_tumor_met_genes_plot)
+dev.off()
+```
+
+```{r}
+met_cells_tumor_and_met_genes_plot <- Heatmap(met_cells_tumor_genes_gc, name = "expression",  cluster_rows = FALSE, cluster_columns = FALSE,show_column_names = FALSE,column_dend_reorder = FALSE,show_column_dend = FALSE,cluster_column_slices = FALSE,show_row_names = FALSE, column_split = factor(met_cells_meta$metastatic_potential_group, levels = c("low", "moderate", "high", "all")),show_heatmap_legend = FALSE,column_title = NULL, row_title = NULL,
+                    row_split = factor(tumor_genes_meta$group, levels = c("low", "moderate", "high")), row_gap = unit(0, "mm"), column_gap = unit(0, "mm"),
+    col = colorRamp2(c(-2, 0, 2), c("#2166AC", "#F7F7F7","#B2182B")),
+    top_annotation = top_annotation_met, right_annotation = tumor_goi_anno,
+    ) %v% Heatmap(met_cells_met_genes_gc, name = "expression",  cluster_rows = FALSE, cluster_columns = FALSE,show_column_names = FALSE,column_dend_reorder = FALSE,show_column_dend = FALSE,cluster_column_slices = FALSE,show_row_names = FALSE, column_split = factor(met_cells_meta$metastatic_potential_group, levels = c("low", "moderate", "high", "all")),show_heatmap_legend = FALSE,column_title = NULL, row_title = NULL,
+                    row_split = factor(met_genes_meta$group, levels = c("low", "moderate", "high")), row_gap = unit(0, "mm"), column_gap = unit(0, "mm"),
+    col = colorRamp2(c(-2, 0, 2), c("#2166AC", "#F7F7F7","#B2182B")), right_annotation = met_goi_anno,
+    layer_fun = function(j, i, x, y,  width, height, fill, slice_r, slice_c) {
+        if(slice_r == slice_c) {
+            grid.rect(gp = gpar(lwd = 2, fill = "transparent"))
+        }})
+
+met_cells_tumor_and_met_genes_plot
+```
+
+```{r}
+pdf("SS2_individual_tumor_1_vs_rest_met_cells_tumor_and_met_genes.pdf", width=5, height=10)
+draw(met_cells_tumor_and_met_genes_plot)
+dev.off()
+```

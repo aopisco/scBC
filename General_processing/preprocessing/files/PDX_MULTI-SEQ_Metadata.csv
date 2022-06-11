@@ -1,0 +1,36 @@
+Sample,MULTI,Barcode,PDX_experiment,Tumor,animalID,Tissue,ER,PR,Her2,Intrinsic_BC_subtype,Met_potent,Met_rank,Tumor_size
+Sample1,Sample1,,PDX1,HCI010,846,tumor,negative,negative,negative,Basal,high,13,2.5
+Sample2,Sample2,,PDX1,HCI001,892,tumor,negative,negative,negative,Basal,moderate,9,2.5
+Sample3,Sample3,,PDX1,HCI009,2019,tumor,negative,negative,negative,Luminal B,moderate,7,2.5
+Sample4,Sample4,,PDX1,H4272,824,tumor,negative,negative,negative,Basal,low,6,2.5
+Sample5,Sample5,,PDX1,HCI002,828,tumor,negative,negative,negative,Basal,low,1,2.5
+Sample6,Sample6,,PDX1,HCI010,846,lung,negative,negative,negative,Basal,high,13,2.5
+Sample7,Sample7,,PDX1,HCI001,892,lung,negative,negative,negative,Basal,moderate,9,2.5
+Sample8,Sample8,,PDX1,HCI009,2019,lung,negative,negative,negative,Luminal B,moderate,7,2.5
+Sample9,Sample9,,PDX1,H4272,824,lung,negative,negative,negative,Basal,low,6,2.5
+Sample10,Sample10,,PDX1,HCI002,828,lung,negative,negative,negative,Basal,low,1,2.5
+Sample11,Sample11,,PDX1,naïve_1,4005,lung,NA,NA,NA,NA,naïve,0,0
+Sample12,Bar1,Bar1,PDX3,HCI005,2042,tumor,positive,positive,positive,Luminal B,low,4,2.5
+Sample13,Bar2,Bar2,PDX3,HCI011,931,tumor,positive,positive,negative,Luminal B,moderate,8,2.5
+Sample14,Bar3,Bar3,PDX3,H5097,2053,tumor,positive,positive,negative,Basal,high,10,2.5
+Sample15,Bar4,Bar4,PDX3,J53353,2044,tumor,negative,negative,negative,NA,high,12,2.5
+Sample16,Bar5,Bar5,PDX3,J55454,2015,tumor,negative,negative,negative,NA,low,2,2.5
+Sample17,Bar6,Bar6,PDX3,J2036,2054,tumor,positive,positive,negative,NA,high,11,2.5
+Sample18,Bar7,Bar7,PDX3,HCI005,2042,lung,positive,positive,positive,Luminal B,low,4,2.5
+Sample19,Bar8,Bar8,PDX3,HCI011,931,lung,positive,positive,negative,Luminal B,moderate,8,2.5
+Sample20,Bar9,Bar9,PDX3,H5097,2053,lung,positive,positive,negative,Basal,high,10,2.5
+Sample21,Bar10,Bar10,PDX3,J53353,2044,lung,negative,negative,negative,NA,high,12,2.5
+Sample22,Bar11,Bar11,PDX3,J55454,2015,lung,negative,negative,negative,NA,low,2,2.5
+Sample23,Bar12,Bar12,PDX3,J2036,2054,lung,positive,positive,negative,NA,high,11,2.5
+Sample24,Bar13,Bar13,PDX3,naïve_2,wt1,lung,NA,NA,NA,NA,naïve,0,0
+Sample25,Bar14,Bar14,PDX3,naïve_3,2022,lung,NA,NA,NA,NA,naïve,0,0
+Sample26,Bar15,Bar15,PDX3,naïve_4,2029,lung,NA,NA,NA,NA,naïve,0,0
+Sample27,Sample27,Bar2,PDX2POOL,HCI010,867,tumor,negative,negative,negative,Basal,high,13,0.5
+Sample28,Bar50,Bar50,PDX2POOL,HCI010,843,tumor,negative,negative,negative,Basal,high,13,1.5
+Sample29,Bar74,Bar74,PDX2POOL,HCI010,847,tumor,negative,negative,negative,Basal,high,13,2.5
+Sample30,Sample30,Bar13,PDX2POOL,HCI010,867,lung,negative,negative,negative,Basal,high,13,0.5
+Sample31,Sample31,Bar25,PDX2POOL,HCI010,869,lung,negative,negative,negative,Basal,high,13,0.5
+Sample32,Bar37,Bar37,PDX2POOL,HCI010,843,lung,negative,negative,negative,Basal,high,13,1.5
+Sample33,Bar49,Bar49,PDX2POOL,HCI010,842,lung,negative,negative,negative,Basal,high,13,1.5
+Sample34,Bar73,Bar73,PDX2POOL,HCI010,847,lung,negative,negative,negative,Basal,high,13,2.5
+Sample35,Sample35,Bar1,PDX2POOL,naïve_5,wt2,lung,NA,NA,NA,NA,naïve,0,0

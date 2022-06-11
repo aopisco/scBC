@@ -1,0 +1,10 @@
+Rscript single_tumor_vs_other_groups.R MULTI_J2036_vs_rest.h5ad MULTI_J2036_vs_rest.h5seurat J2036 high
+Rscript single_tumor_vs_other_groups.R MULTI_H5097_vs_rest.h5ad MULTI_H5097_vs_rest.h5seurat H5097 high
+Rscript single_tumor_vs_other_groups.R MULTI_HCI010_vs_rest.h5ad MULTI_HCI010_vs_rest.h5seurat HCI010 high
+Rscript single_tumor_vs_other_groups.R MULTI_J53353_vs_rest.h5ad MULTI_J53353_vs_rest.h5seurat J53353 high
+Rscript single_tumor_vs_other_groups.R MULTI_H4272_vs_rest.h5ad MULTI_H4272_vs_rest.h5seurat H4272 low
+Rscript single_tumor_vs_other_groups.R MULTI_HCI005_vs_rest.h5ad MULTI_HCI005_vs_rest.h5seurat HCI005 low
+Rscript single_tumor_vs_other_groups.R MULTI_J55454_vs_rest.h5ad MULTI_J55454_vs_rest.h5seurat J55454 low
+Rscript single_tumor_vs_other_groups.R MULTI_HCI002_vs_rest.h5ad MULTI_HCI002_vs_rest.h5seurat HCI002 low
+Rscript single_tumor_vs_other_groups.R MULTI_HCI011_vs_rest.h5ad MULTI_HCI011_vs_rest.h5seurat HCI011 moderate
+Rscript single_tumor_vs_other_groups.R MULTI_HCI001_vs_rest.h5ad MULTI_HCI001_vs_rest.h5seurat HCI001 moderate

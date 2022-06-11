@@ -1,0 +1,96 @@
+---
+title: "metastatic_potential_primary_tumor"
+author: "Wei"
+date: "12/16/2021"
+output: html_document
+---
+```{r}
+library(ComplexHeatmap)
+library(circlize)
+```
+
+```{r}
+df_gc <- read.csv('/mnt/ibm_sm/home/weilun/code/data/scBC_data/files/for_complex_heatmap/SS2_MULTI_tumor_only_shared_genes_gc.csv',row.names = 1)
+df_martix <- as.matrix(df_gc)
+```
+
+```{r}
+cells_meta <- read.csv('/mnt/ibm_sm/home/weilun/code/data/scBC_data/files/for_complex_heatmap/SS2_MULTI_tumor_only_shared_genes_metadata.csv',row.names = 1)
+genes_meta <- read.csv('/mnt/ibm_sm/home/weilun/code/data/scBC_data/files/for_complex_heatmap/SS2_MULTI_tumor_only_shared_genes_gene_metadata.csv',row.names = 1)
+```
+
+```{r}
+gene_type_group = c("low" = "#B3B3B3", "moderate" = "#666666", "high" = "#191919")
+```
+
+```{r}
+top_annotation_setting_ref = HeatmapAnnotation(
+                                            tumor_ID = cells_meta$Tumor_ID,
+                                            method = cells_meta$method,
+                                             metastatic_potential = cells_meta$metastatic_potential_group,
+    col = list(type = c("Tumor" = "#ff7f00", "Metastatic" = "#377eb8"), rs = c("ER-" = "#02818a", "ER+" = "#810f7c"), 
+               method = c("SS2" = "#80CDC1", "MULTI" = "#5E3C99"),
+               metastatic_potential = c("low" = "#B3B3B3", "moderate" = "#666666", "high" = "#191919", "all" = "#ffffff"),
+               tumor_ID=c("H3204" = "#ffed6f", "H4272" = "#ccebc5", "H5097" = "#bc80bd", "H5471" = "#b3de69", "HCI001" = "#fdb462", 
+                          "HCI005" = "#fccde5", "HCI009" = "#fb8072", "HCI010" = "#1598cc", "HCI011" = "#bebada", "J2036" = "#8dd3c7", 
+                          "J53353" = "#80b1d3", "J55454" = "#e8ee88", "global" = "black", "HCI002" = "#d9d9d9")),border = TRUE,gap = unit(3, "points"),
+    simple_anno_size = unit(0.5, "cm"),annotation_name_side = "left"
+    )
+```
+
+```{r}
+plot_ref <- Heatmap(df_martix, name = "expression",  cluster_rows = FALSE, cluster_columns = TRUE,show_column_names = FALSE,column_dend_reorder = FALSE,show_column_dend = FALSE,cluster_column_slices = FALSE,show_row_names = FALSE, 
+    col = colorRamp2(c(-2, 0, 2), c("#2166AC", "#F7F7F7","#B2182B")),
+    top_annotation = top_annotation_setting_ref,column_split = factor(cells_meta$metastatic_potential_group, levels = c("low", "moderate","high")),
+    #row_split = factor(genes_meta$group, levels = c("low", "intermediate","high")),
+    ) +
+    Heatmap(genes_meta$group, name = "gene type",width = unit(0.1, "cm"), col = gene_type_group,use_raster=FALSE) 
+```
+
+```{r}
+plot_ref
+```
+
+```{r}
+pdf("JAN2022_SS2_MULTI_1_VS_rest_overlap_ref.pdf", width=10, height=5)
+draw(plot_ref)
+dev.off()
+```
+
+
+```{r}
+top_annotation_setting = HeatmapAnnotation(
+                                            tumor_ID = cells_meta$Tumor_ID,
+                                            method = cells_meta$method,
+                                             metastatic_potential = cells_meta$metastatic_potential_group,
+    col = list(type = c("Tumor" = "#ff7f00", "Metastatic" = "#377eb8"), rs = c("ER-" = "#02818a", "ER+" = "#810f7c"), 
+               method = c("SS2" = "#80CDC1", "MULTI" = "#5E3C99"),
+               metastatic_potential = c("low" = "#B3B3B3", "moderate" = "#666666", "high" = "#191919", "all" = "#ffffff"),
+               tumor_ID=c("H3204" = "#ffed6f", "H4272" = "#ccebc5", "H5097" = "#bc80bd", "H5471" = "#b3de69", "HCI001" = "#fdb462", 
+                          "HCI005" = "#fccde5", "HCI009" = "#fb8072", "HCI010" = "#1598cc", "HCI011" = "#bebada", "J2036" = "#8dd3c7", 
+                          "J53353" = "#80b1d3", "J55454" = "#e8ee88", "global" = "black", "HCI002" = "#d9d9d9")),border = TRUE,gap = unit(3, "points"),
+    simple_anno_size = unit(0.5, "cm"),show_legend = FALSE,show_annotation_name = FALSE
+    )
+```
+
+
+```{r}
+plot_no_label <- Heatmap(df_martix, name = "expression",  cluster_rows = FALSE, cluster_columns = TRUE,show_column_names = FALSE,column_dend_reorder = FALSE,show_column_dend = FALSE,cluster_column_slices = FALSE,show_row_names = FALSE,show_heatmap_legend = FALSE,column_title = NULL, 
+    col = colorRamp2(c(-2, 0, 2), c("#2166AC", "#F7F7F7","#B2182B")),
+    top_annotation = top_annotation_setting,column_split = factor(cells_meta$metastatic_potential_group, levels = c("low", "moderate","high")),
+    #row_split = factor(genes_meta$group, levels = c("low", "intermediate","high")),
+    ) +
+    Heatmap(genes_meta$group, name = "gene type",width = unit(0.1, "cm"), col = gene_type_group,use_raster=FALSE,show_heatmap_legend = FALSE,show_column_names = FALSE) 
+```
+
+```{r}
+plot_no_label
+```
+
+
+```{r}
+pdf("JAN2022_SS2_MULTI_1_VS_rest_overlap.pdf", width=10, height=5)
+draw(plot_no_label)
+dev.off()
+```
+

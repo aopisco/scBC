@@ -1,0 +1,159 @@
+---
+title: "metastatic_potential_primary_tumor"
+author: "Wei"
+date: "12/16/2021"
+output: html_document
+---
+```{r}
+library(ComplexHeatmap)
+library(circlize)
+```
+
+# making SS2 Heatmap
+```{r}
+df_gc <- read.csv('SS2_global_EMT_gc.csv',row.names = 1)
+df_martix <- as.matrix(df_gc)
+```
+
+```{r}
+cells_meta <- read.csv('SS2_global_EMT_metadata.csv',row.names = 1)
+```
+
+```{r}
+top_annotation_setting_EMT_ref = HeatmapAnnotation( type=cells_meta$EMP_stage, 
+                                                    score = cells_meta$EMP_score,
+                                                    tumor_ID = cells_meta$Tumor_ID, 
+                                             metastatic_potential = cells_meta$metastatic_potential_group,
+    col = list(type = c("Epithelial-like" = "#81B1D3", "EMP Intermediate" = "#BC80B7", "Mesenchymal-like" = "#F47F72"), rs = c("TNBC" = "#02818a", "ER+" = "#810f7c"), 
+               metastatic_potential = c("low" = "#B3B3B3", "moderate" = "#666666", "high" = "#191919", "all" = "#ffffff"),
+               tumor_ID=c("H3204" = "#ffed6f", "H4272" = "#ccebc5", "H5097" = "#bc80bd", "H5471" = "#b3de69", "HCI001" = "#fdb462", 
+                          "HCI005" = "#fccde5", "HCI009" = "#fb8072", "HCI010" = "#1598cc", "HCI011" = "#bebada", "J2036" = "#8dd3c7", 
+                          "J53353" = "#80b1d3", "J55454" = "#e8ee88", "global" = "black", "HCI002" = "#d9d9d9"),
+               score = circlize::colorRamp2(seq(-1, 1, length = 3), hcl.colors(3,"Inferno"))),border = TRUE,gap = unit(3, "points"),
+    simple_anno_size = unit(0.5, "cm"),annotation_name_side = "left"
+    )
+```
+
+```{r}
+plot_ref <- Heatmap(df_martix, name = "expression",  cluster_rows = FALSE, cluster_columns = FALSE,show_column_names = FALSE,column_dend_reorder = FALSE,show_column_dend = FALSE,cluster_column_slices = FALSE, show_row_names = FALSE,
+    col = colorRamp2(c(-2, 0, 2), c("#2166AC", "#F7F7F7","#B2182B")),top_annotation = top_annotation_setting_EMT_ref,column_split = factor(cells_meta$EMP_stage, levels = c("Epithelial-like", "EMP Intermediate", "Mesenchymal-like"))) 
+```
+
+```{r}
+plot_ref
+```
+
+```{r}
+pdf("SS2_EMP_ref.pdf", width=10, height=5)
+draw(plot_ref)
+dev.off()
+```
+
+```{r}
+top_annotation_setting_EMT = HeatmapAnnotation( type=cells_meta$EMP_stage, 
+                                                    score = cells_meta$EMP_score,
+                                                    tumor_ID = cells_meta$Tumor_ID, 
+                                             metastatic_potential = cells_meta$metastatic_potential_group,
+    col = list(type = c("Epithelial-like" = "#81B1D3", "EMP Intermediate" = "#BC80B7", "Mesenchymal-like" = "#F47F72"), rs = c("TNBC" = "#02818a", "ER+" = "#810f7c"), 
+               metastatic_potential = c("low" = "#B3B3B3", "moderate" = "#666666", "high" = "#191919", "all" = "#ffffff"),
+               tumor_ID=c("H3204" = "#ffed6f", "H4272" = "#ccebc5", "H5097" = "#bc80bd", "H5471" = "#b3de69", "HCI001" = "#fdb462", 
+                          "HCI005" = "#fccde5", "HCI009" = "#fb8072", "HCI010" = "#1598cc", "HCI011" = "#bebada", "J2036" = "#8dd3c7", 
+                          "J53353" = "#80b1d3", "J55454" = "#e8ee88", "global" = "black", "HCI002" = "#d9d9d9"),
+               score = circlize::colorRamp2(seq(-1, 1, length = 3), hcl.colors(3,"Inferno"))),border = TRUE,gap = unit(3, "points"),
+    simple_anno_size = unit(0.5, "cm"),show_legend = FALSE,show_annotation_name = FALSE
+    )
+```
+
+```{r}
+plot <- Heatmap(df_martix, name = "expression",  cluster_rows = FALSE, cluster_columns = FALSE,show_column_names = FALSE,column_dend_reorder = FALSE,show_column_dend = FALSE,cluster_column_slices = FALSE, show_row_names = FALSE,column_title = NULL,show_heatmap_legend = FALSE,
+    col = colorRamp2(c(-2, 0, 2), c("#2166AC", "#F7F7F7","#B2182B")),top_annotation = top_annotation_setting_EMT,column_split = factor(cells_meta$EMP_stage, levels = c("Epithelial-like", "EMP Intermediate", "Mesenchymal-like"))) 
+```
+
+```{r}
+plot
+```
+
+```{r}
+pdf("SS2_EMP.pdf", width=10, height=5)
+draw(plot_ref)
+dev.off()
+```
+
+
+
+
+
+
+
+# making MULTI Heatmap
+```{r}
+df_gc<- read.csv('MULTI_global_EMT_gc.csv',row.names = 1)
+df_martix<- as.matrix(df_gc)
+```
+
+```{r}
+cells_meta <- read.csv('MULTI_global_EMT_metadata.csv',row.names = 1)
+```
+
+```{r}
+top_annotation_setting_EMT_ref = HeatmapAnnotation( type=cells_meta$EMP_stage, 
+                                                    score = cells_meta$EMP_score,
+                                                    tumor_ID = cells_meta$Tumor_ID, 
+                                             metastatic_potential = cells_meta$metastatic_potential_group,
+    col = list(type = c("Epithelial-like" = "#81B1D3", "EMP Intermediate" = "#BC80B7", "Mesenchymal-like" = "#F47F72"), rs = c("TNBC" = "#02818a", "ER+" = "#810f7c"), 
+               metastatic_potential = c("low" = "#B3B3B3", "moderate" = "#666666", "high" = "#191919", "all" = "#ffffff"),
+               tumor_ID=c("H3204" = "#ffed6f", "H4272" = "#ccebc5", "H5097" = "#bc80bd", "H5471" = "#b3de69", "HCI001" = "#fdb462", 
+                          "HCI005" = "#fccde5", "HCI009" = "#fb8072", "HCI010" = "#1598cc", "HCI011" = "#bebada", "J2036" = "#8dd3c7", 
+                          "J53353" = "#80b1d3", "J55454" = "#e8ee88", "global" = "black", "HCI002" = "#d9d9d9"),
+               score = circlize::colorRamp2(seq(-1, 1, length = 3), hcl.colors(3,"Inferno"))),border = TRUE,gap = unit(3, "points"),
+    simple_anno_size = unit(0.5, "cm"),annotation_name_side = "left"
+    )
+```
+
+```{r}
+plot_ref <- Heatmap(df_martix, name = "expression",  cluster_rows = FALSE, cluster_columns = FALSE,show_column_names = FALSE,column_dend_reorder = FALSE,show_column_dend = FALSE,cluster_column_slices = FALSE, show_row_names = FALSE,
+    col = colorRamp2(c(-2, 0, 2), c("#2166AC", "#F7F7F7","#B2182B")),top_annotation = top_annotation_setting_EMT_ref,column_split = factor(cells_meta$EMP_stage, levels = c("Epithelial-like", "EMP Intermediate", "Mesenchymal-like"))) 
+```
+
+```{r}
+plot_ref
+```
+
+```{r}
+pdf("MULTI_EMP_ref.pdf", width=10, height=5)
+draw(plot_ref)
+dev.off()
+```
+
+```{r}
+top_annotation_setting_EMT = HeatmapAnnotation( type=cells_meta$EMP_stage, 
+                                                    score = cells_meta$EMP_score,
+                                                    tumor_ID = cells_meta$Tumor_ID, 
+                                             metastatic_potential = cells_meta$metastatic_potential_group,
+    col = list(type = c("Epithelial-like" = "#81B1D3", "EMP Intermediate" = "#BC80B7", "Mesenchymal-like" = "#F47F72"), rs = c("TNBC" = "#02818a", "ER+" = "#810f7c"), 
+               metastatic_potential = c("low" = "#B3B3B3", "moderate" = "#666666", "high" = "#191919", "all" = "#ffffff"),
+               tumor_ID=c("H3204" = "#ffed6f", "H4272" = "#ccebc5", "H5097" = "#bc80bd", "H5471" = "#b3de69", "HCI001" = "#fdb462", 
+                          "HCI005" = "#fccde5", "HCI009" = "#fb8072", "HCI010" = "#1598cc", "HCI011" = "#bebada", "J2036" = "#8dd3c7", 
+                          "J53353" = "#80b1d3", "J55454" = "#e8ee88", "global" = "black", "HCI002" = "#d9d9d9"),
+               score = circlize::colorRamp2(seq(-1, 1, length = 3), hcl.colors(3,"Inferno"))),border = TRUE,gap = unit(3, "points"),
+    simple_anno_size = unit(0.5, "cm"),show_legend = FALSE,show_annotation_name = FALSE
+    )
+```
+
+```{r}
+plot <- Heatmap(df_martix, name = "expression",  cluster_rows = FALSE, cluster_columns = FALSE,show_column_names = FALSE,column_dend_reorder = FALSE,show_column_dend = FALSE,cluster_column_slices = FALSE, show_row_names = FALSE,column_title = NULL,show_heatmap_legend = FALSE,
+    col = colorRamp2(c(-2, 0, 2), c("#2166AC", "#F7F7F7","#B2182B")),top_annotation = top_annotation_setting_EMT,column_split = factor(cells_meta$EMP_stage, levels = c("Epithelial-like", "EMP Intermediate", "Mesenchymal-like"))) 
+```
+
+
+```{r}
+plot
+```
+
+
+```{r}
+pdf("MULTI_EMP.pdf", width=10, height=5)
+draw(plot_ref)
+dev.off()
+```
+
